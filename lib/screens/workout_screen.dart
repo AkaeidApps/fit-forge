@@ -255,22 +255,27 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
       for (final plan in _store.plans)
         _sectionCard(
           margin: const EdgeInsets.only(bottom: 10),
-          child: ListTile(
-            contentPadding: EdgeInsets.zero,
-            title: Text(
-              plan.name,
-              style: const TextStyle(fontWeight: FontWeight.bold),
+          child: Material(
+            color: Colors.transparent,
+            child: ListTile(
+              contentPadding: EdgeInsets.zero,
+              title: Text(
+                plan.name,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+              subtitle: Text(
+                '${plan.focus}\n${plan.exercises.length} exercises',
+              ),
+              isThreeLine: true,
+              leading: _planArtwork(plan, size: 52),
+              trailing: _store.activePlanName == plan.name
+                  ? const Icon(Icons.check_circle, color: AppTheme.primaryGreen)
+                  : const Icon(Icons.chevron_right),
+              onTap: () {
+                _store.selectPlan(plan.name);
+                DefaultTabController.of(context).animateTo(0);
+              },
             ),
-            subtitle: Text('${plan.focus}\n${plan.exercises.length} exercises'),
-            isThreeLine: true,
-            leading: _planArtwork(plan, size: 52),
-            trailing: _store.activePlanName == plan.name
-                ? const Icon(Icons.check_circle, color: AppTheme.primaryGreen)
-                : const Icon(Icons.chevron_right),
-            onTap: () {
-              _store.selectPlan(plan.name);
-              DefaultTabController.of(context).animateTo(0);
-            },
           ),
         ),
     ],
@@ -308,12 +313,15 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
         for (final exercise in exercises)
           _sectionCard(
             margin: const EdgeInsets.only(bottom: 8),
-            child: ListTile(
-              contentPadding: EdgeInsets.zero,
-              leading: _exerciseArtwork(exercise, size: 52),
-              title: Text(exercise.name),
-              subtitle: Text(
-                '${exercise.muscleGroup} · ${exercise.equipment} · ${exercise.defaultSets} sets · ${exercise.repRange}',
+            child: Material(
+              color: Colors.transparent,
+              child: ListTile(
+                contentPadding: EdgeInsets.zero,
+                leading: _exerciseArtwork(exercise, size: 52),
+                title: Text(exercise.name),
+                subtitle: Text(
+                  '${exercise.muscleGroup} · ${exercise.equipment} · ${exercise.defaultSets} sets · ${exercise.repRange}',
+                ),
               ),
             ),
           ),
@@ -391,7 +399,11 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
             if (wasSynchronouslyLoaded || frame != null) return child;
             return ColoredBox(
               color: AppTheme.backgroundBlack,
-              child: Icon(icon, color: AppTheme.primaryGreen, size: size * 0.48),
+              child: Icon(
+                icon,
+                color: AppTheme.primaryGreen,
+                size: size * 0.48,
+              ),
             );
           },
         ),
